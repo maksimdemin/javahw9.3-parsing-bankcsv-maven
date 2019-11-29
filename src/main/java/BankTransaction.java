@@ -1,10 +1,10 @@
-public class bankTransaction {
+public class BankTransaction {
 
     private String descriptionTransaction;
     private double incomeAmount;
     private double outcomeAmount;
 
-    bankTransaction(String descriptionTransaction, double outcomeAmount, double incomeAmount) {
+    BankTransaction(String descriptionTransaction, double outcomeAmount, double incomeAmount) {
         this.descriptionTransaction = descriptionTransaction;
         this.incomeAmount = incomeAmount;
         this.outcomeAmount = outcomeAmount;

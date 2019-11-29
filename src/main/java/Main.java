@@ -28,11 +28,11 @@ public class Main {
         printTotalValueOutcomeAndIncome();
 
 
-        List<bankTransaction> transactions = parseTransactions();
-        System.out.println(transactions.stream().filter(bT -> bT.getIncomeAmount() > 0).mapToDouble(bankTransaction::getIncomeAmount).sum());
-        System.out.println(transactions.stream().filter(bT -> bT.getOutcomeAmount() > 0).mapToDouble(bankTransaction::getOutcomeAmount).sum());
+        List<BankTransaction> transactions = parseTransactions();
+        System.out.println(transactions.stream().filter(bT -> bT.getIncomeAmount() > 0).mapToDouble(BankTransaction::getIncomeAmount).sum());
+        System.out.println(transactions.stream().filter(bT -> bT.getOutcomeAmount() > 0).mapToDouble(BankTransaction::getOutcomeAmount).sum());
         System.out.println(transactions.stream().filter(bankTransaction -> bankTransaction.getDescriptionTransaction()
-                .matches(".*" + MCCCode.MCC5812)).mapToDouble(bankTransaction::getOutcomeAmount).sum());
+                .matches(".*" + MCCCode.MCC5812)).mapToDouble(BankTransaction::getOutcomeAmount).sum());
 
 
     }
@@ -99,15 +99,15 @@ public class Main {
 
 
 
-    private static List<bankTransaction> parseTransactions() {
-        List<bankTransaction> transactions = new ArrayList<>();
+    private static List<BankTransaction> parseTransactions() {
+        List<BankTransaction> transactions = new ArrayList<>();
         for (String line : list) {
             String[] columsCSV = line.replaceAll("\\\"", "").split(",", 8);
             if (columsCSV.length != 8) {
                 System.out.println("Wrong line " + line);
                 continue;
             }
-            transactions.add(new bankTransaction(columsCSV[columsCSV.length - 3],
+            transactions.add(new BankTransaction(columsCSV[columsCSV.length - 3],
                     Double.parseDouble(columsCSV[columsCSV.length - 2].replaceAll("\\,", "\\.")),
                     Double.parseDouble(columsCSV[columsCSV.length - 1].replaceAll("\\,", "\\."))));
         }
