@@ -11,6 +11,21 @@
     <build>
         <plugins>
             <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+<!--                    <outputDirectory>output-resources</outputDirectory>-->
+                    <resources>
+                        <resource>
+                            <directory>${project.basedir}/src/main/resources</directory>
+                            <includes>
+                                <include>**/*.csv</include>
+                            </includes>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <archive>
@@ -21,6 +36,15 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -36,11 +60,11 @@
     </properties>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>com.opencsv</groupId>-->
-<!--            <artifactId>opencsv</artifactId>-->
-<!--            <version>5.0</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.7</version>
+        </dependency>
     </dependencies>
 
 </project>
