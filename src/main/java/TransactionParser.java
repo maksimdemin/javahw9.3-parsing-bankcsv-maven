@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public final class TransactionParser {
+
     private static final String PATH_TO_CSV = "src/main/resources/movementList.csv";
 
     public TransactionParseResult parse() throws IOException {

@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main {
@@ -7,8 +8,12 @@ public class Main {
 
         TransactionParser transactionParser = new TransactionParser();
 
-        TransactionAnalyze.printFullInfoAboutExpense(transactionParser.parse());
-        TransactionAnalyze.printFullInfoAboutIncome(transactionParser.parse());
+        try {
+            TransactionAnalyze.printFullInfoAboutExpense(transactionParser.parse());
+            TransactionAnalyze.printFullInfoAboutIncome(transactionParser.parse());
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }
