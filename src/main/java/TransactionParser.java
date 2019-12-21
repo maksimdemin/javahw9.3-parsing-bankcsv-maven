@@ -7,17 +7,31 @@ import java.util.List;
 
 public final class TransactionParser {
 
-    private static final String PATH_TO_CSV = "src/main/resources/movementList.csv";
+//    private static final String PATH_TO_CSV = "src/main/resources/movementList.csv";
+
+    File file = new File(
+            Main.class.getClassLoader().getResource("movementList.csv").getFile()
+    );
 
     public TransactionParseResult parse() throws IOException {
         TransactionParseResult transactionParseResult = new TransactionParseResult();
         List<BankTransaction> transactions = transactionParseResult.getTransactions();
-        Reader readFromFileCSV = new FileReader(PATH_TO_CSV);
+        List<String> invalidLines = transactionParseResult.getInvalidLines();
+
+        Reader readFromFileCSV = new FileReader(file);
 
         Iterable<CSVRecord> lines = CSVFormat.DEFAULT.withSkipHeaderRecord().withFirstRecordAsHeader().parse(readFromFileCSV);
         for (CSVRecord line : lines) {
-            BigDecimal incomeAmount = BigDecimal.valueOf(Double.parseDouble(line.get(6).replaceAll("\\,", "\\.")));
-            BigDecimal expenseAmount = BigDecimal.valueOf(Double.parseDouble(line.get(7).replaceAll("\\,", "\\.")));
+            if (line.size() != 8) {
+                invalidLines.add("Invalid line N: " + (line.getRecordNumber() + 1));
+                continue;
+            }
+            if(!line.get(6).replaceAll("\\\"", "").matches("\\d+(?:[.,]\\d+)?") || !line.get(7).replaceAll("\\\"", "").matches("\\d+(?:[.,]\\d+)?") ) {
+                invalidLines.add("Invalid line N: " + (line.getRecordNumber() + 1));
+                continue;
+            }
+            BigDecimal incomeAmount = new BigDecimal(line.get(6).replaceAll("\\,", "\\."));
+            BigDecimal expenseAmount = new BigDecimal((line.get(7).replaceAll("\\,", "\\.")));
             transactions.add(new BankTransaction(getInfoContractor(line), expenseAmount, incomeAmount, getMCCCode(line)));
             }
         return transactionParseResult;

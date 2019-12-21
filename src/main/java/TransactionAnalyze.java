@@ -1,8 +1,16 @@
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class TransactionAnalyze {
 
+
+    public static void printInfoAfterParseFileCSV(TransactionParseResult transactions) {
+        printFullInfoAboutExpense(transactions);
+        printFullInfoAboutIncome(transactions);
+        printInvalidLinesFromFileCSV(transactions);
+    }
 
     public static void printFullInfoAboutExpense(TransactionParseResult transactions){
 
@@ -10,7 +18,7 @@ public class TransactionAnalyze {
         transactions.getTransactions().stream()
                 .filter(b -> b.getTypeTransaction().equals(BankTransaction.TypeTransaction.EXPENSE))
                 .forEach(b -> {
-                    expenseMap.putIfAbsent(b.getDescriptionTransaction(), new BigDecimal("0.0"));
+                    expenseMap.putIfAbsent(b.getDescriptionTransaction(), BigDecimal.ZERO);
                     expenseMap.put(b.getDescriptionTransaction(), expenseMap.get(b.getDescriptionTransaction()).add(b.getExpenseAmount()));
                 });
 
@@ -32,7 +40,7 @@ public class TransactionAnalyze {
         transactions.getTransactions().stream()
                 .filter(b -> b.getTypeTransaction().equals(BankTransaction.TypeTransaction.INCOME))
                 .forEach(b -> {
-                    expenseMap.putIfAbsent(b.getDescriptionTransaction(), new BigDecimal("0.0"));
+                    expenseMap.putIfAbsent(b.getDescriptionTransaction(), BigDecimal.ZERO);
                     expenseMap.put(b.getDescriptionTransaction(), expenseMap.get(b.getDescriptionTransaction()).add(b.getIncomeAmount()));
                 });
 
@@ -50,22 +58,32 @@ public class TransactionAnalyze {
 
 
     public static BigDecimal getTotalIncomeSum(TransactionParseResult transactions) {
-        BigDecimal sum = new BigDecimal("0.0");
-        for (BankTransaction transaction : transactions.getTransactions()) {
-            sum = sum.add(transaction.getIncomeAmount());
-        }
-        return sum;
+//        BigDecimal sum = BigDecimal.ZERO;
+//        for (BankTransaction transaction : transactions.getTransactions()) {
+//            sum = sum.add(transaction.getIncomeAmount());
+//        }
+        return transactions.getTransactions().stream()
+                .map(BankTransaction::getIncomeAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 
 
     public static BigDecimal getTotalExpenseSum(TransactionParseResult transactions) {
 
-        BigDecimal sum = new BigDecimal("0.0");
-        for (BankTransaction transaction : transactions.getTransactions()) {
-            sum = sum.add(transaction.getExpenseAmount());
-        }
-        return sum;
+//        BigDecimal sum = BigDecimal.ZERO;
+//        for (BankTransaction transaction : transactions.getTransactions()) {
+//            sum = sum.add(transaction.getExpenseAmount());
+//        }
+        return transactions.getTransactions().stream()
+                .map(BankTransaction::getExpenseAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    public static void printInvalidLinesFromFileCSV(TransactionParseResult invalidLines) {
+        System.out.printf("\nFile CSV has %d invalid lines:%n", invalidLines.getInvalidLines().size());
+        for (String line: invalidLines.getInvalidLines()) {
+            System.out.println(line);
+        }
+    }
 }

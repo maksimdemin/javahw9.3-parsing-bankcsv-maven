@@ -8,6 +8,7 @@ public class TransactionParseResult {
 
     public TransactionParseResult() {
         transactions = new ArrayList<>();
+        invalidLines = new ArrayList<>();
     }
 
     public List<BankTransaction> getTransactions() {
@@ -17,7 +18,6 @@ public class TransactionParseResult {
     public List<String> getInvalidLines() {
         return invalidLines;
     }
-
 }
 
 

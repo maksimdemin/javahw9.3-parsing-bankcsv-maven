@@ -9,8 +9,9 @@ public class Main {
         TransactionParser transactionParser = new TransactionParser();
 
         try {
-            TransactionAnalyze.printFullInfoAboutExpense(transactionParser.parse());
-            TransactionAnalyze.printFullInfoAboutIncome(transactionParser.parse());
+//            TransactionAnalyze.printFullInfoAboutExpense(transactionParser.parse());
+//            TransactionAnalyze.printFullInfoAboutIncome(transactionParser.parse());
+            TransactionAnalyze.printInfoAfterParseFileCSV(transactionParser.parse());
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         }

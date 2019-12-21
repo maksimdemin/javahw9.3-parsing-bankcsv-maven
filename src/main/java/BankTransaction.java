@@ -11,7 +11,7 @@ public class BankTransaction {
     private BigDecimal expenseAmount;
     private String MCCCode;
     private TypeTransaction typeTransaction;
-    BigDecimal bdNull = new BigDecimal(0);
+    BigDecimal bdNil = BigDecimal.ZERO;
 
 
     BankTransaction(String descriptionTransaction, BigDecimal expenseAmount, BigDecimal incomeAmount, String MCCCode) {
@@ -19,10 +19,10 @@ public class BankTransaction {
         this.expenseAmount = expenseAmount;
         this.incomeAmount = incomeAmount;
 
-        if (incomeAmount.compareTo(new BigDecimal("0.0")) > 0 && expenseAmount.equals(new BigDecimal("0.0"))) {
+        if (incomeAmount.compareTo(bdNil) > 0 && expenseAmount.equals(bdNil)) {
             typeTransaction = TypeTransaction.INCOME;
         }
-        if (expenseAmount.compareTo(new BigDecimal("0.0")) > 0 && incomeAmount.equals(new BigDecimal("0.0"))) {
+        if (expenseAmount.compareTo(bdNil) > 0 && incomeAmount.equals(bdNil)) {
             typeTransaction = TypeTransaction.EXPENSE;
         }
 
