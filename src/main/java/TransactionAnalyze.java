@@ -1,7 +1,5 @@
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class TransactionAnalyze {
 
@@ -58,10 +56,6 @@ public class TransactionAnalyze {
 
 
     public static BigDecimal getTotalIncomeSum(TransactionParseResult transactions) {
-//        BigDecimal sum = BigDecimal.ZERO;
-//        for (BankTransaction transaction : transactions.getTransactions()) {
-//            sum = sum.add(transaction.getIncomeAmount());
-//        }
         return transactions.getTransactions().stream()
                 .map(BankTransaction::getIncomeAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -70,20 +64,19 @@ public class TransactionAnalyze {
 
 
     public static BigDecimal getTotalExpenseSum(TransactionParseResult transactions) {
-
-//        BigDecimal sum = BigDecimal.ZERO;
-//        for (BankTransaction transaction : transactions.getTransactions()) {
-//            sum = sum.add(transaction.getExpenseAmount());
-//        }
         return transactions.getTransactions().stream()
                 .map(BankTransaction::getExpenseAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public static void printInvalidLinesFromFileCSV(TransactionParseResult invalidLines) {
-        System.out.printf("\nFile CSV has %d invalid lines:%n", invalidLines.getInvalidLines().size());
-        for (String line: invalidLines.getInvalidLines()) {
-            System.out.println(line);
+        if (!invalidLines.isAllLinesValid()) {
+            System.out.printf("\nFile CSV has %d invalid lines:%n", invalidLines.getInvalidLines().size());
+            for (String line: invalidLines.getInvalidLines()) {
+                System.out.println(line);
+            }
         }
+        else
+            System.out.println("\nFile CSV has 0 invalid line(s)");
     }
 }

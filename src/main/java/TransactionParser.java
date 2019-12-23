@@ -3,24 +3,17 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public final class TransactionParser {
 
-//    private static final String PATH_TO_CSV = "src/main/resources/movementList.csv";
+    public TransactionParseResult parse(Path path) throws IOException {
+        List<BankTransaction> transactions = new ArrayList<>();
+        List<String> invalidLines = new ArrayList<>();
 
-    File file = new File(
-            Main.class.getClassLoader().getResource("movementList.csv").getFile()
-    );
-
-    public TransactionParseResult parse() throws IOException {
-        TransactionParseResult transactionParseResult = new TransactionParseResult();
-        List<BankTransaction> transactions = transactionParseResult.getTransactions();
-        List<String> invalidLines = transactionParseResult.getInvalidLines();
-
-        Reader readFromFileCSV = new FileReader(file);
-
-        Iterable<CSVRecord> lines = CSVFormat.DEFAULT.withSkipHeaderRecord().withFirstRecordAsHeader().parse(readFromFileCSV);
+        Iterable<CSVRecord> lines = CSVFormat.DEFAULT.withSkipHeaderRecord().withFirstRecordAsHeader().withIgnoreEmptyLines().parse(new FileReader(String.valueOf(path)));
         for (CSVRecord line : lines) {
             if (line.size() != 8) {
                 invalidLines.add("Invalid line N: " + (line.getRecordNumber() + 1));
@@ -34,7 +27,7 @@ public final class TransactionParser {
             BigDecimal expenseAmount = new BigDecimal((line.get(7).replaceAll("\\,", "\\.")));
             transactions.add(new BankTransaction(getInfoContractor(line), expenseAmount, incomeAmount, getMCCCode(line)));
             }
-        return transactionParseResult;
+        return new TransactionParseResult(transactions, invalidLines);
     }
 
 

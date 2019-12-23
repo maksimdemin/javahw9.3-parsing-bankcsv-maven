@@ -6,17 +6,23 @@ public class TransactionParseResult {
     private List<BankTransaction> transactions;
     private List<String> invalidLines;
 
-    public TransactionParseResult() {
-        transactions = new ArrayList<>();
-        invalidLines = new ArrayList<>();
+    public TransactionParseResult(List<BankTransaction> transactions, List<String> invalidLines) {
+        this.transactions = transactions;
+        this.invalidLines = invalidLines;
     }
 
     public List<BankTransaction> getTransactions() {
-        return transactions;
+        return new ArrayList<>(transactions);
     }
 
     public List<String> getInvalidLines() {
-        return invalidLines;
+        return new ArrayList<>(invalidLines);
+    }
+
+
+
+    public boolean isAllLinesValid() {
+        return invalidLines.isEmpty();
     }
 }
 
