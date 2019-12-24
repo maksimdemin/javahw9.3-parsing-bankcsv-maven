@@ -3,17 +3,16 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class TransactionParser {
 
-    public TransactionParseResult parse(Path path) throws IOException {
+    public TransactionParseResult parse(String path) throws IOException {
         List<BankTransaction> transactions = new ArrayList<>();
         List<String> invalidLines = new ArrayList<>();
 
-        Iterable<CSVRecord> lines = CSVFormat.DEFAULT.withSkipHeaderRecord().withFirstRecordAsHeader().withIgnoreEmptyLines().parse(new FileReader(String.valueOf(path)));
+        Iterable<CSVRecord> lines = CSVFormat.DEFAULT.withSkipHeaderRecord().withFirstRecordAsHeader().withIgnoreEmptyLines().parse(new FileReader(path));
         for (CSVRecord line : lines) {
             if (line.size() != 8) {
                 invalidLines.add("Invalid line N: " + (line.getRecordNumber() + 1));
